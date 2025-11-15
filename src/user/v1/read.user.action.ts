@@ -1,11 +1,9 @@
 import { UserModel, UserType } from "./user.model";
 
 // DECLARE ACTION FUNCTION
-async function readUserAction(): Promise<UserType[]> {
-  const results = await UserModel.find();
+export default async function readUsersAction(): Promise<UserType[]> {
+  // Solo usuarios activos (soft delete)
+  const results = await UserModel.find({ active: true }).lean();
 
-  return results;
+  return results as UserType[];
 }
-
-// EXPORT ACTION FUNCTION
-export default readUserAction;
