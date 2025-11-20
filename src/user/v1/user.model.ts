@@ -1,5 +1,13 @@
 import { model, Schema, Document } from "mongoose";
 
+// Tipo Reserve History
+export interface UserHistoryItem {
+  bookId: string;
+  bookTitle: string;
+  reservedAt: Date;
+  deliveredAt?: Date;
+}
+
 // DECLARE MODEL TYPE
 export interface UserType extends Document {
   name: string;
@@ -13,6 +21,7 @@ export interface UserType extends Document {
     canEditUsers: boolean;
     canDisableUsers: boolean;
   };
+  history: UserHistoryItem[];
 }
 
 // DECLARE MONGOOSE SCHEMA
@@ -31,7 +40,8 @@ const UserSchema = new Schema<UserType>(
       trim: true,
     },
     password: {
-      type: String, required: true,
+      type: String,
+      required: true,
     },
     active: {
       type: Boolean,
@@ -44,9 +54,19 @@ const UserSchema = new Schema<UserType>(
       canEditUsers: { type: Boolean, default: false },
       canDisableUsers: { type: Boolean, default: false },
     },
+
+    //Historial de Reserva
+    history: [
+      {
+        bookId: { type: String, required: true },
+        bookTitle: { type: String, required: true },
+        reservedAt: { type: Date, required: true },
+        deliveredAt: { type: Date }, 
+      },
+    ],
   },
   {
-    timestamps: true, //CreatedAt y UpdatedAt
+    timestamps: true,
   }
 );
 
